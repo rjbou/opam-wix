@@ -141,23 +141,26 @@ let main_wxs (module Info : INFO) : wxs =
               name "Id", "SetEnviroment";
               name "Guid", get_uuid mode_rand
             ]);
-            ] @
 
-            (List.map (fun (var,value) -> [
-              `Start_element ((name "Environment"), [
-                name "Id", var;
-                name "Name", var;
-                name "Value", value;
-                name "Permanent", "no";
-                name "Part", "last";
-                name "Action", "set";
-                name "System", "yes"
-              ]);
-              `End_element])
-              Info.environement
-            |> List.flatten)
+              `Start_element ((name "CreateFolder"), []);
+              `End_element;
+              ] @
 
-            @ [
+              (List.mapi (fun id (var,value) -> [
+                `Start_element ((name "Environment"), [
+                  name "Id", "var" ^ string_of_int id;
+                  name "Name", var;
+                  name "Value", value;
+                  name "Permanent", "no";
+                  name "Part", "last";
+                  name "Action", "set";
+                  name "System", "yes"
+                ]);
+                `End_element])
+                Info.environement
+              |> List.flatten)
+
+              @ [
             `End_element;
 
             `Start_element ((name "Component"), [
@@ -211,17 +214,6 @@ let main_wxs (module Info : INFO) : wxs =
             ]);
             ] @
 
-            (List.map (fun (dirname, _,dir_ref) -> [
-              `Start_element ((name "Directory"), [
-                name "Id", dir_ref;
-                name "Name", dirname;
-              ]);
-              `End_element])
-              Info.embedded_dirs
-            |> List.flatten)
-
-            @
-
             (List.map (fun base -> [
               `Start_element ((name "File"), [
                 name "Id", normalize_id base;
@@ -235,7 +227,18 @@ let main_wxs (module Info : INFO) : wxs =
 
             @ [
             `End_element;
+            ] @
 
+            (List.map (fun (dirname, _, dir_ref) -> [
+              `Start_element ((name "Directory"), [
+                name "Id", dir_ref;
+                name "Name", dirname;
+              ]);
+              `End_element])
+              Info.embedded_dirs
+            |> List.flatten)
+
+            @ [
           `End_element;
 
         `End_element;
@@ -398,6 +401,10 @@ let main_wxs (module Info : INFO) : wxs =
       |> List.flatten)
 
       @ [
+
+      `Start_element ((name "ComponentRef"), [ name "Id", "Embedded" ]);
+      `End_element;
+
       `Start_element ((name "ComponentRef"), [ name "Id", "ApplicationShortcutDektop" ]);
       `End_element;
 
