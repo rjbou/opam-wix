@@ -367,6 +367,11 @@ let create_bundle cli =
     in
     let main_path = OpamFilename.Op.(tmp_dir // (name ^ ".wxs")) in
     Wix.write_wxs (OpamFilename.to_string main_path) wxs;
+
+
+    OpamFilename.copy_in main_path (OpamFilename.Dir.of_string ".");
+
+
     OpamConsole.formatted_msg "Compiling WiX components...\n";
     System.call_list @@ List.map (fun (basename, _) ->
       let basename = OpamFilename.Base.to_string basename in
