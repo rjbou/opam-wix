@@ -346,12 +346,13 @@ let main_wxs (module Info : INFO) : wxs =
       `Start_element ((name "ComponentRef"), [ name "Id", "ProgramMenuDir" ]);
       `End_element;
       ] @
-      match Info.dlls with
+
+     (match Info.dlls with
       | [] -> []
       | _ -> [
         `Start_element ((name "ComponentRef"), [ name "Id", "Dlls" ]);
         `End_element;
-      ] @
+      ]) @
 
       (List.map (fun (_, cg, _) -> [
         `Start_element ((name "ComponentGroupRef"), [
@@ -359,15 +360,14 @@ let main_wxs (module Info : INFO) : wxs =
         ]);
         `End_element])
         Info.embedded_dirs
-      |> List.flatten)
+      |> List.flatten) @
 
-      @
-      match Info.embedded_dirs with
+      (match Info.embedded_files with
       | [] -> []
       | _ -> [
         `Start_element ((name "ComponentRef"), [ name "Id", "Embedded" ]);
         `End_element;
-      ]
+      ])
 
       @ [
       `Start_element ((name "ComponentRef"), [ name "Id", "ApplicationShortcutDektop" ]);
