@@ -281,7 +281,6 @@ let main_wxs (module Info : INFO) : wxs =
             `End_element;
           ]
           @ [
-          `End_element;
 
         `End_element;
 
