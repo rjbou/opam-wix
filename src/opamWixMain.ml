@@ -278,19 +278,20 @@ let create_bundle cli =
       let src = resolve_path env (module F) path in
       if not @@ F.exists src
       then OpamConsole.error_and_exit `Not_found
-            "Couldn't find %s %s." (OpamConsole.colorise
-            `bold (F.to_string src)) F.name;
+          "Couldn't find %s %s." (OpamConsole.colorise
+                                    `bold (F.to_string src)) F.name;
       let dst = F.(bundle_dir / dst_base) in
       F.copy ~src ~dst;
       F.basename dst, dst
     in
-    let embedded_dirs = List.map (fun (name, dirname) ->
-      copy_embedded (module Dir_impl) dirname name)
-      conffile.File.Conf.c_embbed_dir
-    in
-    let embedded_files = List.map (fun filename ->
-      copy_embedded (module File_impl) filename (Filename.basename filename)
-      |> fst) conffile.File.Conf.c_embbed_file
+    let embedded_dirs, embedded_files =
+      List.partition_map (fun (name, path) ->
+          let is_dir = Sys.is_directory path in
+          if is_dir then
+            Left (copy_embedded (module Dir_impl) path name)
+          else
+            Right (copy_embedded (module File_impl) path name))
+        conffile.File.Conf.c_embed
     in
     OpamConsole.formatted_msg "Bundle created.";
     OpamConsole.header_msg "WiX setup";
@@ -333,11 +334,42 @@ let create_bundle cli =
       let icon_file = data_basename conf.icon_file DataDir.Images.logo
       let dlg_bmp_file = data_basename conf.dlg_bmp DataDir.Images.dlgbmp
       let banner_bmp_file = data_basename conf.ban_bmp DataDir.Images.banbmp
-      let embedded_dirs = List.map (fun (base,_) ->
-        let base = OpamFilename.Base.to_string base in
-        base, component_group base, dir_ref base) embedded_dirs
-      let embedded_files = List.map OpamFilename.Base.to_string embedded_files
-      let environement = conffile.File.Conf.c_envvar
+      let environement =
+        let all_paths =
+          let paths =
+            List.fold_left (fun paths (base, dirname) ->
+                OpamStd.String.Map.add (OpamFilename.Base.to_string base)
+                  "DIR_PATH" (* XXX chemin du dossier une fois installé *)
+                  paths)
+              OpamStd.String.Map.empty embedded_dirs
+          in
+          List.fold_left (fun paths (base, filename) ->
+              OpamStd.String.Map.add (OpamFilename.Base.to_string base)
+                "FILE_PATH" (* XXX chemin du dossier une fois installé *)
+                paths)
+            paths embedded_files
+        in
+        let env var =
+          assert (OpamVariable.Full.scope var = OpamVariable.Full.Global);
+          let svar = OpamVariable.Full.to_string var in
+          match OpamStd.String.Map.find_opt svar all_paths with
+          | None -> None
+          | Some path -> Some (OpamVariable.string path)
+        in
+        List.map (fun (var,content) ->
+            let content =
+              OpamFilter.expand_string ~partial:false ~default:(fun x -> x)
+                env content
+            in
+            var, content)
+          conffile.File.Conf.c_envvar
+      let embedded_dirs =
+        List.map (fun (base,_) ->
+            let base = OpamFilename.Base.to_string base in
+            base, component_group base, dir_ref base)
+          embedded_dirs
+      let embedded_files =
+        List.map (fun (b,_) -> OpamFilename.Base.to_string b) embedded_files
     end in
     System.call_list @@ List.map (fun (basename, dirname) ->
       let basename = OpamFilename.Base.to_string basename in
