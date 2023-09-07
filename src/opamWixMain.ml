@@ -338,15 +338,15 @@ let create_bundle cli =
         let all_paths =
           let paths =
             List.fold_left (fun paths (base, dirname) ->
-                OpamStd.String.Map.add (OpamFilename.Base.to_string base)
-                  "DIR_PATH" (* XXX chemin du dossier une fois installé *)
+                let base = OpamFilename.Base.to_string base in
+                OpamStd.String.Map.add base ("[INSTALL_DIR]\\"^base)
                   paths)
               OpamStd.String.Map.empty embedded_dirs
           in
           List.fold_left (fun paths (base, filename) ->
-              OpamStd.String.Map.add (OpamFilename.Base.to_string base)
-                "FILE_PATH" (* XXX chemin du dossier une fois installé *)
-                paths)
+                let base = OpamFilename.Base.to_string base in
+                OpamStd.String.Map.add base ("[INSTALL_DIR]\\"^base)
+                  paths)
             paths embedded_files
         in
         let env var =
