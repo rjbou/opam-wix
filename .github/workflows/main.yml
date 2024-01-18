@@ -35,8 +35,8 @@ jobs:
       - name: install opam
         run: |
           echo $PATH
-          curl -L https://github.com/ocaml/opam/releases/download/2.1.5/opam-full-2.1.5.tar.gz
-          tar xvf opam-full-2.1.5.tar.gz
+          curl -L -o opam.tar.gz https://github.com/ocaml/opam/releases/download/2.1.5/opam-full-2.1.5.tar.gz
+          tar xvf opam.tar.gz
           cd opam-full-2.1.5
           make
           make install
