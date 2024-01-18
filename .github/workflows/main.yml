@@ -28,6 +28,7 @@ jobs:
       - name: install opam
         run: |
           echo $PATH
+          opam repo add usual git+https://github.com/ocaml/opam-repository
           opam install opam-devel.2.1.5
           ls _opam\bin
           cp _opam\bin\opam.exe D:\cygwin\bin
