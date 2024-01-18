@@ -28,16 +28,21 @@ jobs:
       - run: D:\cygwin\bin\curl.exe --help
       - run: D:\cygwin\bin\curl.exe -L -o wix311.zip https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip
       - run: ls wix311.zip
-#      - run: opam install . --deps-only
-#      - run: opam exec -- make build
-#      - name: install opam
-#        run: |
-#        echo $PATH
-#        curl https://github.com/ocaml/opam/releases/download/2.1.5/opam-full-2.1.5.tar.gz
-#        tar xvf opam-full-2.1.5.tar.gz
-#        cd opam-full-2.1.5
-#        make
-#        make install
-#      - run: opam config report
-#      - run: opam install .
-#      - run: opam wix --help
+      - name: Compile
+        run: |
+          opam install . --deps-only
+          opam exec -- make build
+      - name: install opam
+        run: |
+          echo $PATH
+          curl https://github.com/ocaml/opam/releases/download/2.1.5/opam-full-2.1.5.tar.gz
+          tar xvf opam-full-2.1.5.tar.gz
+          cd opam-full-2.1.5
+          make
+          make install
+      - run: which opam
+      - name: Tests
+        run: opam exec -- make test
+      - run: opam config report
+      - run: opam install .
+      - run: opam wix --help
