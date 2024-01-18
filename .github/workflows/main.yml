@@ -28,8 +28,9 @@ jobs:
       - name: install opam
         run: |
           echo $PATH
-          opam switch create opam-inst
-          opam install opam-devel.2.1.5 --sw opam-inst
+          opam install opam-devel.2.1.5
+          ls _opam\bin
+          cp _opam\bin\opam.exe D:\cygwin\bin
       - run: which opam
 
       - run: D:\cygwin\bin\curl.exe --help
