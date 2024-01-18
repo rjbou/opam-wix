@@ -38,8 +38,8 @@ jobs:
           curl -L -o opam.tar.gz https://github.com/ocaml/opam/releases/download/2.1.5/opam-full-2.1.5.tar.gz
           tar xvf opam.tar.gz
           cd opam-full-2.1.5
-          make
-          make install
+          opam exec -- make
+          opam exec -- make install
       - run: which opam
       - name: Tests
         run: opam exec -- make test
