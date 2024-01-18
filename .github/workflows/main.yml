@@ -25,6 +25,13 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
 
+      - name: install opam
+        run: |
+          echo $PATH
+          opam switch create opam-inst
+          opam install opam-devel.2.1.5 --sw opam-inst
+      - run: which opam
+
       - run: D:\cygwin\bin\curl.exe --help
       - run: D:\cygwin\bin\curl.exe -L -o wix311.zip https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip
       - run: ls wix311.zip
@@ -32,17 +39,14 @@ jobs:
         run: |
           opam install . --deps-only
           opam exec -- make build
-      - name: install opam
-        run: |
-          echo $PATH
-          curl -L -o opam.tar.gz https://github.com/ocaml/opam/releases/download/2.1.5/opam-full-2.1.5.tar.gz
-          tar xvf opam.tar.gz
-          cd opam-full-2.1.5
-          opam exec -- make
-          opam exec -- make install
-      - run: which opam
       - name: Tests
         run: opam exec -- make test
       - run: opam config report
       - run: opam install .
       - run: opam wix --help
+
+#          curl -L -o opam.tar.gz https://github.com/ocaml/opam/releases/download/2.1.5/opam-full-2.1.5.tar.gz
+#          tar xvf opam.tar.gz
+#          cd opam-full-2.1.5
+#          opam exec -- make
+#          opam exec -- make install
