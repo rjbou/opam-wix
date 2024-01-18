@@ -25,8 +25,8 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
 
-      - run: D:\cygwin\bin\curl.exe -q -o wix311.zip https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip
-      - run: ls
+      - run: D:\cygwin\bin\curl.exe -o wix311.zip https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip
+      - run: ls wix311.zip
 #      - run: opam install . --deps-only
 #      - run: opam exec -- make build
 #      - run: opam config report
