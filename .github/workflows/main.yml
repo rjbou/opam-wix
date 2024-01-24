@@ -37,7 +37,8 @@ jobs:
           sed -i 's/b33c8a1a6c7ed797816ce27df4855107/24c1357de1b1842b78d5ddcac5cf09b1/'  D:\.opam\repo\usual\packages\seq\seq.base\files\META.seq
           rm D:\.opam\repo\*.cache
           opam install opam-devel.2.1.5 --debug
-          cp D:\a\opam-wix\opam-wix\_opam\lib\opam-devel\opam D:\cygwin\bin\opam.exe
+          ls D:\a\opam-wix\opam-wix\_opam\lib\opam-devel\
+          cp D:\a\opam-wix\opam-wix\_opam\lib\opam-devel\opam.exe D:\cygwin\bin\opam.exe
       - run: which opam
 
       - run: D:\cygwin\bin\curl.exe --help
