@@ -29,7 +29,7 @@ jobs:
         run: |
           echo $PATH
           opam repo add usual git+https://github.com/ocaml/opam-repository
-          opam install opam-devel.2.1.5 -vv
+          opam install opam-devel.2.1.5 -vv --no-checksums
           ls _opam\bin
           cp _opam\bin\opam.exe D:\cygwin\bin
       - run: which opam
