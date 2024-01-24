@@ -31,8 +31,8 @@ jobs:
           opam repo add usual git+https://github.com/ocaml/opam-repository
           opam show seq --raw
           opam var root
-          ls $(opam var root)\repo\usual\packages\seq\seq.base\files\seq.install
-          md5sum $(opam var root)\repo\usual\packages\seq\seq.base\files\seq.install
+          ls D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
+          md5sum D:\.opam\&repo\usual\packages\seq\seq.base\files\seq.install
           opam install opam-devel.2.1.5 -vv
           ls _opam\bin
           cp _opam\bin\opam.exe D:\cygwin\bin
