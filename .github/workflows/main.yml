@@ -38,7 +38,7 @@ jobs:
           rm D:\.opam\repo\*.cache
           opam install opam-devel.2.1.5 --debug
           ls _opam\bin
-          cp _opam\bin\opam.exe D:\cygwin\bin
+          cp _opam\bin\opam D:\cygwin\bin\opam.exe
       - run: which opam
 
       - run: D:\cygwin\bin\curl.exe --help
