@@ -33,7 +33,8 @@ jobs:
           opam var root
           ls D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
           md5sum D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
-          opam install opam-devel.2.1.5 -vv
+          cat D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
+          opam install opam-devel.2.1. -vv
           ls _opam\bin
           cp _opam\bin\opam.exe D:\cygwin\bin
       - run: which opam
