@@ -34,7 +34,9 @@ jobs:
           ls D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
           md5sum D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
           cat D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
-          opam install opam-devel.2.1. -vv
+          sed -i 's/026b31e1df290373198373d5aaa26e42/e83f130f4f0cd1b80d7d138ff84d7515'  D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
+          rm D:\.opam\repo\*.cache
+          opam install opam-devel.2.1.5 --debug
           ls _opam\bin
           cp _opam\bin\opam.exe D:\cygwin\bin
       - run: which opam
