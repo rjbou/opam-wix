@@ -37,7 +37,12 @@ jobs:
 
       - run: echo $PATH
       - run: set path
-      - run: which opam
+      - run: $env:Path
+      - run: |
+          $env:Path
+          $env:Path = 'D:\a\opam-wix\opam-wix\_opam\lib\opam-devel;' + $env:Path
+          $env:Path
+          which opam
 
       - run: D:\cygwin\bin\curl.exe --help
       - run: D:\cygwin\bin\curl.exe -L -o wix311.zip https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip
@@ -47,7 +52,9 @@ jobs:
           opam install . --deps-only
           opam exec -- make build
       - name: Tests
-        run: opam exec -- make test
+        run: |
+          $env:Path = 'D:\a\opam-wix\opam-wix\_opam\lib\opam-devel;' + $env:Path
+          opam exec -- make test
       - run: opam config report
       - run: opam install .
       - run: opam wix --help
