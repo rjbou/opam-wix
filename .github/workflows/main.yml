@@ -27,18 +27,16 @@ jobs:
 
       - name: install opam
         run: |
-          echo $PATH
-          opam repo add usual git+https://github.com/ocaml/opam-repository
+          opam repo add usual git+https://github.com/ocaml/opam-repository#2ac2f114ac8d187445ea96cb4ad4b51da9c0ff3c
           opam show seq --raw
           opam var root
           md5sum D:\.opam\repo\usual\packages\seq\seq.base\files\META.seq
-          cat D:\.opam\repo\usual\packages\seq\seq.base\files\META.seq
-          sed -i 's/026b31e1df290373198373d5aaa26e42/e83f130f4f0cd1b80d7d138ff84d7515/'  D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
-          sed -i 's/b33c8a1a6c7ed797816ce27df4855107/24c1357de1b1842b78d5ddcac5cf09b1/'  D:\.opam\repo\usual\packages\seq\seq.base\files\META.seq
-          rm D:\.opam\repo\*.cache
-          opam install opam-devel.2.1.5 --debug
+          opam install opam-devel.2.1.5
           ls D:\a\opam-wix\opam-wix\_opam\lib\opam-devel\
           cp D:\a\opam-wix\opam-wix\_opam\lib\opam-devel\opam.exe D:\cygwin\bin\opam.exe
+
+      - run: echo $PATH
+      - run: set path
       - run: which opam
 
       - run: D:\cygwin\bin\curl.exe --help
@@ -59,3 +57,7 @@ jobs:
 #          cd opam-full-2.1.5
 #          opam exec -- make
 #          opam exec -- make install
+
+#          cat D:\.opam\repo\usual\packages\seq\seq.base\files\META.seq
+#          sed -i 's/026b31e1df290373198373d5aaa26e42/e83f130f4f0cd1b80d7d138ff84d7515/'  D:\.opam\repo\usual\packages\seq\seq.base\files\seq.install
+#          sed -i 's/b33c8a1a6c7ed797816ce27df4855107/24c1357de1b1842b78d5ddcac5cf09b1/'  D:\.opam\repo\usual\packages\seq\seq.base\files\META.seq
