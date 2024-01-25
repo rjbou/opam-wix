@@ -25,6 +25,14 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
 
+      - run: D:\cygwin\bin\curl.exe --help
+      - run: D:\cygwin\bin\curl.exe -L -o wix311.zip https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip
+      - run: ls wix311.zip
+      - name: Compile
+        run: |
+          opam install . --deps-only
+          opam exec -- make build
+
       - name: install opam
         run: |
           opam repo add usual git+https://github.com/ocaml/opam-repository#2ac2f114ac8d187445ea96cb4ad4b51da9c0ff3c
@@ -32,8 +40,6 @@ jobs:
           opam var root
           md5sum D:\.opam\repo\usual\packages\seq\seq.base\files\META.seq
           opam install opam-devel.2.1.5
-          ls D:\a\opam-wix\opam-wix\_opam\lib\opam-devel\
-          cp D:\a\opam-wix\opam-wix\_opam\lib\opam-devel\opam.exe D:\cygwin\bin\opam.exe
 
       - run: echo $PATH
       - run: set path
@@ -44,13 +50,6 @@ jobs:
           $env:Path
           which opam
 
-      - run: D:\cygwin\bin\curl.exe --help
-      - run: D:\cygwin\bin\curl.exe -L -o wix311.zip https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip
-      - run: ls wix311.zip
-      - name: Compile
-        run: |
-          opam install . --deps-only
-          opam exec -- make build
       - name: Tests
         run: |
           $env:Path = 'D:\a\opam-wix\opam-wix\_opam\lib\opam-devel;' + $env:Path
